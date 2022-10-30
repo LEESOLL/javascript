@@ -62,6 +62,8 @@
             padding: 20px;
 
             box-shadow: 0px 0px 3px 0px gray;
+
+            display: none;
         }
         .mybtn {
             display: flex;
@@ -75,17 +77,40 @@
             margin-right: 10px;
         }
     </style>
+    <script>
+        $.ajax({ //서버랑 통신하는 방식
+            type: "GET",
+            url: "http://spartacodingclub.shop/sparta_api/seoulair",
+            data: {},
+            success: function(response){ // 서버에서 준 결과를 response라는 변수에 담음
+                let rows = response['RealtimeCityAir']['row']
+                for(let i = 0; i < rows.length; i++) {
+                    let gu_name = rows[i]['MSRSTE_NM']
+                    let mise = rows[i]['IDEX_MVL']
+
+                    console.log(gu_name, mise)
+                }
+            }
+        })
+
+        function open_box() {
+           $('#post-box').show()
+        }
+        function close_box() {
+           $('#post-box').hide()
+        }
+    </script>
 </head>
 
 <body>
     <div class="mytitle">
         <h1>내 생애 최고의 영화들</h1>
-        <button>영화 기록하기😍❤</button>
+        <button onclick="open_box()">영화 기록하기😍❤</button>
     </div>
-    <div class="mypost">
+    <div class="mypost" id="post-box">
         <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-          <label for="floatingInput">영화URL</label>
+          <input type="email" class="form-control" id="url" placeholder="name@example.com">
+          <label for="url">영화URL</label>
         </div>
          <div class="input-group mb-3">
           <label class="input-group-text" for="inputGroupSelect01">별점</label>
@@ -104,11 +129,11 @@
         </div>
         <div class="mybtn">
             <button type="button" class="btn btn-dark">기록하기</button>
-            <button type="button" class="btn btn-outline-dark">닫기</button>
+            <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
         </div>
     </div>
     <div class="wrap">
-        <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div id="cards-box" class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col">
                 <div class="card">
                     <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
